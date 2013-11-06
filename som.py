@@ -9,6 +9,8 @@ import numpy as np
 import theano
 import theano.tensor as T
 
+import pickle
+
 # Self Organizing Map
 #   as explained here - http://www.ai-junkie.com/ann/som/som1.html
 # Parameters:
@@ -76,6 +78,14 @@ class SOM(object):
         im = im.resize((self.width*16, self.height*16))
 
         im.save('som_images/output_%i.gif' %(iteration))
+
+    def load_w_from_file(self, filename):
+        output = open(filename, 'rb')
+        (self.height, self.width, self.last_W) = pickle.load(output)
+
+    def save_w_to_file(self, filename):
+        output = open(filename, 'wb')
+        pickle.dump((self.height, self.width, self.last_W), output)
 
     def train(self, data):
         data = np.asarray(data, dtype=theano.config.floatX)
